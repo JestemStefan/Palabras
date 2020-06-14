@@ -12,7 +12,7 @@ def ask(polish, spanish):
     # for word in polish_words:
 
     UserInput = input("Jak jest " + polish[randNum] + " po hiszpańsku?: ")
-    UserInput.strip().replace(" ", "")
+    UserInput = UserInput.strip().replace(" ", "")
     UserInput = UserInput.lower()
     #print(UserInput)
 
@@ -40,12 +40,16 @@ def main():
     polish_words = []
     spanish_words = []
 
+    print("Naciśnij dowolny klawisz aby rozpocząć!")
     for line in textfile:
         langSplit = line.strip().replace(" ", "").lower().split(":")
-        #print(langSplit)
-        #print(langSplit)
-        polish_words.append(langSplit[0])
-        spanish_words.append(langSplit[1])
+
+        if len(langSplit) == 2:
+            if len(langSplit[0]) and len(langSplit[1]):
+
+                #print(len(langSplit[1]))
+                polish_words.append(langSplit[0])
+                spanish_words.append(langSplit[1])
 
     #print(polish_words)
     #print(spanish_words)
