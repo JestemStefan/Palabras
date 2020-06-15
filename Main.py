@@ -1,22 +1,16 @@
 from __future__ import unicode_literals
-from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 from random import randint
 from tkinter import *
 
-polish_words = []
-spanish_words = []
-
-w = ["uno", "dos", "tres", "quadro", "sinko"]
-
-
+words = []
 
 def make_tables(root, word):
     entries = []
     i = 0
 
     for w in word:
-        Label(root, text=w, width=15, anchor='w').grid(row=i)
+        Label(root, text=w, width=15, anchor='center').grid(row=i)
         ent = Entry(root)
         ent.grid(row=i, column=1)
         entries.append(ent)
@@ -24,17 +18,24 @@ def make_tables(root, word):
     return entries
 
 
-def fetch(entries):
-    print(entries[0].get())
+def check_words(entries):
     for entry in entries:
         text = entry.get()
+        if text == "word":
+            entry.configure({"background": "Green"})
         print('%s' % text)
 
 def get_words():
+
+    global words
+
+    polish_words = []
+    spanish_words = []
+
     # show an "Open" dialog box and return the path to the selected file
     filename = askopenfilename(title="Wybierz plik ze słówkami",
                                filetypes=(("Plik tekstowy", "*.txt"), ("Wszystkie pliki", "*.*")))
-
+    Tk().destroy()
     textfile = open(filename, "r+", encoding="utf-8")
 
     print("Hiszpańskie litery: á, é, í, ó, ú, ü, ñ, ¿, ¡ \n")
@@ -47,22 +48,21 @@ def get_words():
                 polish_words.append(langSplit[1])
                 spanish_words.append(langSplit[0])
 
-    # print(polish_words)
-    # print(spanish_words)
     textfile.close()
+
+    if len(polish_words) > 0 and len(spanish_words) > 0:
+        words = [spanish_words, polish_words]
+    else:
+        print("Brak słówek, Wybierz odpowiedni plik txt!")
 
 
 def ask(polish, spanish):
 
     randNum = randint(0, len(polish)-1)
-    #print(randNum)
-    UserInput = ""
-    # for word in polish_words:
 
     UserInput = input("Jak jest " + polish[randNum] + " po hiszpańsku?: ")
     UserInput = UserInput.strip().replace("  ", " ")
     UserInput = UserInput.lower()
-    #print(UserInput)
 
     if UserInput == spanish[randNum]:
         print("Muy bien!")
@@ -77,30 +77,25 @@ def ask(polish, spanish):
         print("Nie ma więcej słówkek!")
         input("")
 
+def quit(r):
+    r.destroy()
+
 def main():
 
-
     root = Tk()
+    root.title("Palabras")
 
-    ents = make_tables(root, w)
+    b1 = Button(root, text='Wybierz słówka', command=get_words).grid(row=1, column=1)
 
-    print(ents)
 
-    b1 = Button(root, text='Show',command=(lambda e=ents: fetch(e))).grid(row=6, column=1)
+
+    root.wm_protocol("WM_DELETE_WINDOW", lambda arg=root: quit(arg))
+
+    #ents = make_tables(root, words[1])
+
+    #b2 = Button(root, text='Show', command=(lambda e=ents: check_words(e))).grid(row=len(words[1]), column=1)
 
     root.mainloop()
-
-    if len(polish_words) > 0 and len(spanish_words) > 0:
-        ask(polish_words, spanish_words)
-    else:
-        print("Brak słówek, Wybierz odpowiedni plik txt!")
-
-
-
-
-#if __name__ == "__main__":
-    #main()
-
 
 
 main()
