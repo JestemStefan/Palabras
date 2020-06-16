@@ -4,6 +4,8 @@ from random import randint
 from tkinter import *
 
 words = []
+wordsLoaded = False
+tableDone = False
 
 def make_tables(root, word):
     entries = []
@@ -12,7 +14,7 @@ def make_tables(root, word):
     for w in word:
         Label(root, text=w, width=15, anchor='center').grid(row=i)
         ent = Entry(root)
-        ent.grid(row=i, column=1)
+        ent.grid(row=i, column=1, padx=5, pady=5)
         entries.append(ent)
         i += 1
     return entries
@@ -22,12 +24,16 @@ def check_words(entries):
     for entry in entries:
         text = entry.get()
         if text == "word":
-            entry.configure({"background": "Green"})
-        print('%s' % text)
+            entry.configure({"background": "#caffab"})
+        else:
+            entry.configure({"background": "#ffbaab"})
+        #print('%s' % text)
 
-def get_words():
+
+def get_words(button, root):
 
     global words
+    global wordsLoaded
 
     polish_words = []
     spanish_words = []
@@ -52,8 +58,17 @@ def get_words():
 
     if len(polish_words) > 0 and len(spanish_words) > 0:
         words = [spanish_words, polish_words]
+        wordsLoaded = True
+
+        ents = make_tables(root, words[1])
+        b2 = Button(root, text='Sprawdź!', command=(lambda e=ents: check_words(e))).grid(row=len(words[1]), column=1)
+
+        root.geometry("300x750")
+
     else:
         print("Brak słówek, Wybierz odpowiedni plik txt!")
+
+    button.destroy()
 
 
 def ask(polish, spanish):
@@ -85,15 +100,10 @@ def main():
     root = Tk()
     root.title("Palabras")
 
-    b1 = Button(root, text='Wybierz słówka', command=get_words).grid(row=1, column=1)
-
-
+    b1 = Button(root, text='Wybierz słówka', command=lambda: get_words(b1, root))
+    b1.place(relx=0.5, rely=0.5, anchor=CENTER)
 
     root.wm_protocol("WM_DELETE_WINDOW", lambda arg=root: quit(arg))
-
-    #ents = make_tables(root, words[1])
-
-    #b2 = Button(root, text='Show', command=(lambda e=ents: check_words(e))).grid(row=len(words[1]), column=1)
 
     root.mainloop()
 
