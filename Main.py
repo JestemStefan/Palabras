@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 from tkinter.filedialog import askopenfilename
-from random import randint
 from tkinter import *
 
 words = []
@@ -13,21 +12,29 @@ def make_tables(root, word):
 
     for w in word:
         Label(root, text=w, width=15, anchor='center').grid(row=i)
-        ent = Entry(root)
+        ent = Entry(root, justify='center')
         ent.grid(row=i, column=1, padx=5, pady=5)
         entries.append(ent)
         i += 1
     return entries
 
 
-def check_words(entries):
-    for entry in entries:
+def check_words(entries, root, spanish_words):
+
+    for i, entry in enumerate(entries):
         text = entry.get()
-        if text == "word":
-            entry.configure({"background": "#caffab"})
+
+        text = text.strip().replace("  ", " ")
+        text = text.lower()
+        if text == spanish_words[i]:
+            entry.configure({"background": "#caffab", "font": "Times 10 normal"})
         else:
-            entry.configure({"background": "#ffbaab"})
-        #print('%s' % text)
+            entry.configure({"background": "#ffbaab", "font": "Times 10 overstrike"})
+            Label(root, text=spanish_words[i], width=15, anchor='center', bg="#caffab").grid(column=3, row=i)
+
+        # clear user input
+        entry.delete(0, END)
+        entry.insert(0, text)
 
 
 def get_words(button, root):
@@ -61,36 +68,15 @@ def get_words(button, root):
         wordsLoaded = True
 
         ents = make_tables(root, words[1])
-        b2 = Button(root, text='Sprawdź!', command=(lambda e=ents: check_words(e))).grid(row=len(words[1]), column=1)
+        b2 = Button(root, text='Sprawdź!', command=(lambda e=ents: check_words(e, root, words[0])))
+        b2.grid(row=len(words[1]), column=1)
 
-        root.geometry("300x750")
+        root.geometry("350x750")
 
     else:
         print("Brak słówek, Wybierz odpowiedni plik txt!")
 
     button.destroy()
-
-
-def ask(polish, spanish):
-
-    randNum = randint(0, len(polish)-1)
-
-    UserInput = input("Jak jest " + polish[randNum] + " po hiszpańsku?: ")
-    UserInput = UserInput.strip().replace("  ", " ")
-    UserInput = UserInput.lower()
-
-    if UserInput == spanish[randNum]:
-        print("Muy bien!")
-    else:
-        print("Fatal! Prawidłowa odpowiedź to " + spanish[randNum])
-
-    polish.pop(randNum)
-    spanish.pop(randNum)
-    if len(polish) > 0:
-        ask(polish, spanish)
-    else:
-        print("Nie ma więcej słówkek!")
-        input("")
 
 def quit(r):
     r.destroy()
