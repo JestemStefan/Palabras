@@ -46,7 +46,7 @@ def get_words(button, root, file):
         # randomize words
         z = list(zip(spanish_words, polish_words))
         rng.shuffle(z)
-        z = z[:25]
+        z = z[:20]
         print(z)
 
         spanish_words[:], polish_words[:] = zip(*z)
@@ -59,13 +59,17 @@ def get_words(button, root, file):
         labels = tables[1]
 
         selectFileButton = Button(root, text='Wybierz plik', command=(lambda: new_file(root)))
+        selectFileButton.configure({"font": "Calibri 14 normal"})
         selectFileButton.grid(row=len(words[1]), column=0)
 
         newWordsButton = Button(root, text='Losuj słówka', command=(lambda: new_words(root)))
+        newWordsButton.configure({"font": "Calibri 14 normal"})
         newWordsButton.grid(row=len(words[1]), column=1)
 
+
         checkButton = Button(root, text='Sprawdź!', command=(lambda e=ents: check_words(e, root, words[0])))
-        checkButton.grid(row=len(words[1]), column=2, padx=10, pady=10)
+        checkButton.configure({"font": "Calibri 14 normal"})
+        checkButton.grid(row=len(words[1]), column=2, padx=20, pady=20)
 
         root.geometry("")
 
@@ -83,10 +87,12 @@ def make_tables(root, word):
 
     for w in word:
         lab = Label(root, text=w, width=len(w), anchor='center')
+        lab.configure({"font": "Calibri 14 normal"})
         lab.grid(row=i, padx=5, pady=5)
         labels.append(lab)
 
         ent = Entry(root, justify='center')
+        ent.configure({"font": "Calibri 14 normal"})
         ent.grid(row=i, column=1, padx=5, pady=5)
         entries.append(ent)
         i += 1
@@ -107,19 +113,24 @@ def check_words(entries, root, spanish_words):
         text = text.lower()
         if text == spanish_words[i]:
             # if answer is correct then make entry box green
-            entry.configure({"background": "#caffab", "font": "Times 10 normal"})
-            Label(root, text="Muy bien! :)", width=len(longest_word), anchor='center', bg="#caffab").grid(column=2,
-                                                                                                            row=i)
+            entry.configure({"background": "#caffab", "font": "Calibri 14 normal"})
+            l = Label(root, text="Muy bien! :)", width=len(longest_word), anchor='center', bg="#caffab")
+            l.configure({"font": "Calibri 14 normal"})
+            l.grid(column=2, row=i)
 
         # if answer is wrong or there is no answer then make entry box red
         elif text == "":
-            entry.configure({"background": "#ffbaab", "font": "Times 10 normal"})
-            Label(root, text=spanish_words[i], width=len(longest_word), anchor='center', bg="#fcffad").grid(column=2, row=i)
+            entry.configure({"background": "#ffbaab", "font": "Calibri 14 normal"})
+            l = Label(root, text=spanish_words[i], width=len(longest_word), anchor='center', bg="#fcffad")
+            l.configure({"font": "Calibri 14 normal"})
+            l.grid(column=2, row=i)
 
         # overstrike wrong answer
         else:
-            entry.configure({"background": "#ffbaab", "font": "Times 10 overstrike"})
-            Label(root, text=spanish_words[i], width=len(longest_word), anchor='center', bg="#fcffad").grid(column=2, row=i)
+            entry.configure({"background": "#ffbaab", "font": "Calibri 14 overstrike"})
+            l = Label(root, text=spanish_words[i], width=len(longest_word), anchor='center', bg="#fcffad")
+            l.configure({"font": "Calibri 14 normal"})
+            l.grid(column=2, row=i)
 
         # clear user input
         entry.delete(0, END)
@@ -161,6 +172,7 @@ def main():
     root.title("Palabras")
 
     b1 = Button(root, text='Wybierz słówka', command=lambda: get_words(b1, root, ""))
+    b1.configure({"font": "Calibri 14 normal"})
     b1.place(relx=0.5, rely=0.5, anchor=CENTER)
 
     root.wm_protocol("WM_DELETE_WINDOW", lambda arg=root: quit(arg))
