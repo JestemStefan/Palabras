@@ -106,6 +106,12 @@ def check_words(entries, root, spanish_words):
     # find longest word to resize Label
     longest_word = max(spanish_words, key=len)
 
+    length_max = len(longest_word)
+
+    if length_max < 12:
+        length_max = 12
+
+
     for i, entry in enumerate(entries):
         text = entry.get()
 
@@ -114,21 +120,21 @@ def check_words(entries, root, spanish_words):
         if text == spanish_words[i]:
             # if answer is correct then make entry box green
             entry.configure({"background": "#caffab", "font": "Calibri 14 normal"})
-            l = Label(root, text="Muy bien! :)", width=len(longest_word), anchor='center', bg="#caffab")
+            l = Label(root, text="Muy bien! :)", width=length_max, anchor='center', bg="#caffab")
             l.configure({"font": "Calibri 14 normal"})
             l.grid(column=2, row=i)
 
         # if answer is wrong or there is no answer then make entry box red
         elif text == "":
             entry.configure({"background": "#ffbaab", "font": "Calibri 14 normal"})
-            l = Label(root, text=spanish_words[i], width=len(longest_word), anchor='center', bg="#fcffad")
+            l = Label(root, text=spanish_words[i], width=length_max, anchor='center', bg="#fcffad")
             l.configure({"font": "Calibri 14 normal"})
             l.grid(column=2, row=i)
 
         # overstrike wrong answer
         else:
             entry.configure({"background": "#ffbaab", "font": "Calibri 14 overstrike"})
-            l = Label(root, text=spanish_words[i], width=len(longest_word), anchor='center', bg="#fcffad")
+            l = Label(root, text=spanish_words[i], width=length_max, anchor='center', bg="#fcffad")
             l.configure({"font": "Calibri 14 normal"})
             l.grid(column=2, row=i)
 
